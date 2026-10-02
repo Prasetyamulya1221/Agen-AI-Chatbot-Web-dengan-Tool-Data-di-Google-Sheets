@@ -1,0 +1,160 @@
+{
+  "name": "Agen AI Chatbot Web dengan Tool Data di Google Sheets",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1fdd2b53-1e4d-4f93-8d5c-6971196f9f73",
+      "name": "When chat message received",
+      "webhookId": "1ccdb006-8c12-4017-a7fe-9116382f3741"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu asisten pelatihan NF Academy, yang siap menjawab pertanyaan dengan baik sesuai dengan bahasa yang digunakan penanya. Jawablah pertanyaan tentang jenis atau program pelatihan, nama pelatihan atau kursus, deskripsi topik pelatihan atau kursus, biaya atau harga, sesuai dengan informasi yang tersedia dalam Tool Get row(s) in sheet in Google Sheets. Jika kamu tidak menemukan informasi produk, harga, dan tempat pelatihan, jangan mengarang jawaban. Berikan jawaban, \"Maaf, saya belum memiliki data yang Anda minta. Silakan lihat web nfacademy.id\"."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "2cbf7d58-9be4-4b39-b3bb-f4ae6743a741",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.1-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        176,
+        240
+      ],
+      "id": "c05f501a-2b58-4a79-92a2-ddfb200ae49d",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "4MmK6qRVcTsZrPac",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        320,
+        240
+      ],
+      "id": "b2bf5d5c-33a4-4ddf-82d3-2316f186a987",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "164qnxmfHrnEYnAkQy7QMKNVLZYm9QU2cbXL2wXJLkG8",
+          "mode": "list",
+          "cachedResultName": "Salinan dari n8n 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/164qnxmfHrnEYnAkQy7QMKNVLZYm9QU2cbXL2wXJLkG8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/164qnxmfHrnEYnAkQy7QMKNVLZYm9QU2cbXL2wXJLkG8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        496,
+        240
+      ],
+      "id": "f3ce0a43-0d2b-4736-9f3a-ac1713b4d736",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "iL3GU1V6R0IYiDlj",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "ef079443-60aa-4739-b985-8a92647b908a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "51149f5a9ad7ceeaf222a873f23e817b8a793dadf2430dbc9b5502ad6cac00d7"
+  },
+  "nodeGroups": [],
+  "id": "bAnM4Zl9aERAvsPQ",
+  "tags": []
+}
